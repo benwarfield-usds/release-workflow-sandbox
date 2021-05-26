@@ -7,7 +7,7 @@ env:
   DEPLOY_ENV: prod
 
 jobs:
-  do-release-things:
+  do-whatever-things:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
