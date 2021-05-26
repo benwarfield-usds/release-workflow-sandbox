@@ -1,4 +1,4 @@
-name: Deploy Prod
+name: Release Event
 
 on:
   release:
