@@ -2,7 +2,7 @@ name: Pre-release Event
 
 on:
   release:
-    types: prereleased
+    types: [prereleased]
 
 env:
   DEPLOY_ENV: prod
