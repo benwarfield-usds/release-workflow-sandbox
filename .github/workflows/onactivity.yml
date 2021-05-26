@@ -1,0 +1,17 @@
+name: Deploy Prod
+
+on:
+  release:
+
+env:
+  DEPLOY_ENV: prod
+
+jobs:
+  do-release-things:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Say hello
+        run: echo ${GITHUB_REF} did something
+      - name: Shout it out
+        run: jq < ${GITHUB_EVENT_PATH}
