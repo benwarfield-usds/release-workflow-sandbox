@@ -14,3 +14,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Say hello
         run: echo ${GITHUB_REF} is not yet released
+      - name: Make a file
+        run: echo $(date) is when this was created for ${GITHUB_REF} > release-file.txt
+      - name: Add upload URL to environment
+        run: echo UPLOAD_URL=$(jq -r .release.upload_url < ${GITHUB_EVENT_PATH}| sed -e 's/{?name,label}//') >> $GITHUB_ENV
+      - name: Mess with that
+        run: echo $UPLOAD_URL
+      - name: Attempt an upload
+        run: curl -X POST --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --data-binary @release-file.txt "$UPLOAD_URL?name=MyFile&label=Fancy"
