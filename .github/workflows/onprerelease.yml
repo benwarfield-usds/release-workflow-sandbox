@@ -21,4 +21,7 @@ jobs:
       - name: Mess with that
         run: echo $UPLOAD_URL
       - name: Attempt an upload
-        run: curl -X POST --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --data-binary @release-file.txt "$UPLOAD_URL?name=MyFile&label=Fancy"
+        run: |
+          curl -X POST --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --data-binary @release-file.txt \
+          "$UPLOAD_URL?name=MyFile&label=Fancy"
