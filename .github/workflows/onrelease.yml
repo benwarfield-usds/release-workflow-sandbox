@@ -17,6 +17,11 @@ jobs:
       - name: Get download URL
         run: echo DOWNLOAD=$(jq -r '.release.assets jq -r | select(.label=="Fancy File") | .url' < ${GITHUB_EVENT_PATH}) >> $GITHUB_ENV
       - name: Fetch it
-        run: curl -L -v --header 'Accept: application/octet-stream' --header 'Authorization: Bearer ${{secrets.GITHUB_TOKEN}}' $DOWNLOAD > releasefile.txt
+        run: |
+          curl -L -v \
+           --header 'Accept: application/octet-stream' \
+           --header 'Authorization: Bearer ${{secrets.GITHUB_TOKEN}}' \
+           $DOWNLOAD \
+           > releasefile.txt
       - name: Look at it
         run: cat releasefile.txt
