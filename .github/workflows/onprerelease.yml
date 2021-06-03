@@ -24,4 +24,6 @@ jobs:
         run: |
           curl -X POST --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           --data-binary @release-file.txt \
+          --header "Accept: application/vnd.github.v3+json" \
+          --header "Content-type: text/plain" \
           "$UPLOAD_URL?name=MyFile&label=Fancy"
