@@ -22,5 +22,6 @@ jobs:
       - name: List releases
         run: echo "Attempting to retrieve releases from '$RELEASE_URL'"; curl -s $RELEASE_URL | jq
       - name: Get an arbitrary release
-        run: curl -s -H "Accept: application/vnd.github.v3+json" "$RELEASE_URL/tags/v0.4.1" | jq
+        run: |
+          curl -s -H "Accept: application/vnd.github.v3+json" "$RELEASE_URL/tags/v0.4.1" | jq
       
