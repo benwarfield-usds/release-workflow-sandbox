@@ -18,7 +18,7 @@ jobs:
       - name: Shout it out
         run: jq < ${GITHUB_EVENT_PATH}
       - name: Find releases URL
-        run: echo RELEASE_URL=$(jq < ${GITHUB_EVENT_PATH} '.repository.releases_url' | sed -e 's/{\/id}//' ) >> $GITHUB_ENV
+        run: echo RELEASE_URL=$(jq -r < ${GITHUB_EVENT_PATH} '.repository.releases_url' | sed -e 's/{\/id}//' ) >> $GITHUB_ENV
       - name: List releases
         run: echo "Attempting to retrieve releases from '$RELEASE_URL'"; curl $RELEASE_URL | jq
       - name: Get an arbitrary release
