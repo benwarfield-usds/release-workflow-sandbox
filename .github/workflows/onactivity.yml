@@ -3,6 +3,7 @@ name: Some Release Event
 on:
   release:
   workflow_dispatch:
+  push:
 
 env:
   DEPLOY_ENV: prod
