@@ -20,7 +20,7 @@ jobs:
       - name: Find releases URL
         run: echo RELEASE_URL=$(jq -r < ${GITHUB_EVENT_PATH} '.repository.releases_url' | sed -e 's/{\/id}//' ) >> $GITHUB_ENV
       - name: List releases
-        run: echo "Attempting to retrieve releases from '$RELEASE_URL'"; curl $RELEASE_URL | jq
+        run: echo "Attempting to retrieve releases from '$RELEASE_URL'"; curl -s $RELEASE_URL | jq
       - name: Get an arbitrary release
-        run: curl $RELEASE_URL/tags/v0.4.1 | jq
+        run: curl -s -H "Accept: application/vnd.github.v3+json" "$RELEASE_URL/tags/v0.4.1" | jq
       
