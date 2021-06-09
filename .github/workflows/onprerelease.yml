@@ -34,8 +34,4 @@ jobs:
           --header "Accept: application/vnd.github.v3+json" \
           --header "Content-type: text/plain" \
           "$UPLOAD_URL?name=MyFile.txt&label=Fancy%20File" | jq .url)
-          if [[ 0 -eq $? ]]; then
-            echo Uploaded file to $DOWNLOAD_URL 
-          else
-            exit 1
-          fi
+          [[ -n "$DOWNLOAD_URL" ]] && echo Uploaded file to $DOWNLOAD_URL 
