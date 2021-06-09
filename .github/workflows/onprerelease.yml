@@ -17,7 +17,7 @@ jobs:
       - name: Make a file
         run: echo $(date) is when this was created for ${GITHUB_REF} > release-file.txt
       - name: Add upload URL to environment
-        run: echo UPLOAD_URL=$(jq -r .release.upload_url < ${GITHUB_EVENT_PATH}| sed -e 's/{?name,label}//') >> $GITHUB_ENV
+        run: echo UPLOAD_URL=$(echo '${{github.event.release.upload_url}}' | sed -e 's/{?name,label}//') >> $GITHUB_ENV
       - name: Mess with that
         run: echo $UPLOAD_URL
       - name: Attempt an upload

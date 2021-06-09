@@ -17,7 +17,8 @@ jobs:
       - name: Say hello
         run: echo ${GITHUB_REF} is released
       - name: Get download URL
-        run: echo DOWNLOAD=$(jq -r '.release.assets[] | select(.label=="Fancy File") | .url' < ${GITHUB_EVENT_PATH}) >> $GITHUB_ENV
+        # run: echo DOWNLOAD=$(jq -r '.release.assets[] | select(.label=="Fancy File") | .url' < ${GITHUB_EVENT_PATH}) >> $GITHUB_ENV
+        run: echo DOWNLOAD=$(echo '${{github.event.release.assets}}'| jq -r '.[] | select(.label=="Fancy File") | .url') >> $GITHUB_ENV
       - name: Fetch it
         run: |
           curl -L -v \
