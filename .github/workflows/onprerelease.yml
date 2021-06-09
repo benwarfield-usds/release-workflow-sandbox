@@ -10,7 +10,7 @@ env:
 jobs:
   pre-release-precheck:
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.release.assets.*.name, "MyFile.txt") }}
+    if: ${{ contains(github.event.release.assets.*.name, 'MyFile.txt') }}
     steps:
       - name: LOL
         working-directory: /
