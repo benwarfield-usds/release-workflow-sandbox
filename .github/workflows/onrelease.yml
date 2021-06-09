@@ -10,6 +10,8 @@ env:
 jobs:
   do-release-things:
     runs-on: ubuntu-latest
+    outputs:
+      stuff: ${{steps.store-things.outputs.file-content}}
     steps:
       - uses: actions/checkout@v2
       - name: Say hello
@@ -24,4 +26,14 @@ jobs:
            $DOWNLOAD \
            > releasefile.txt
       - name: Look at it
-        run: cat releasefile.txt
+        id: store-things
+        run: echo "::set-output name=file-content::$(cat releasefile.txt)"
+  do-followup-things:
+    runs-on: ubuntu-latest 
+    needs: do-release-things
+    steps:
+      - name: Fetch that output
+        working-directory: /
+        run: |
+          echo "File content follows"
+          echo ${{needs.do-release-things.outputs.stuff}
