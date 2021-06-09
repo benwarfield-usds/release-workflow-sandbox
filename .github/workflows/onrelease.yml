@@ -36,4 +36,4 @@ jobs:
         working-directory: /
         run: |
           echo "File content follows"
-          echo ${{needs.do-release-things.outputs.stuff}
+          echo ${{needs.do-release-things.outputs.stuff}}
