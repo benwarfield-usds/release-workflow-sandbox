@@ -29,9 +29,11 @@ jobs:
         run: echo $UPLOAD_URL
       - name: Attempt an upload
         run: |
-          DOWNLOAD_URL=$(curl -f -s -X POST --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          UPLOAD_JSON=$(curl -f -s -X POST --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           --data-binary @release-file.txt \
           --header "Accept: application/vnd.github.v3+json" \
           --header "Content-type: text/plain" \
-          "$UPLOAD_URL?name=MyFile.txt&label=Fancy%20File" | jq .url)
+          "$UPLOAD_URL?name=MyFile.txt&label=Fancy%20File")
+          echo $UPLOAD_JSON
+          DOWNLOAD_URL=$(echo "$UPLOAD_JSON" | jq .url)
           [[ -n "$DOWNLOAD_URL" ]] && echo Uploaded file to $DOWNLOAD_URL 
