@@ -8,6 +8,13 @@ env:
   DEPLOY_ENV: prod
 
 jobs:
+  pre-release-precheck:
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.release.assets.*.name, "MyFile.txt") }}
+    steps:
+      - name: LOL
+        working-directory: /
+        run: echo "This upload is going to fail."
   do-prerelease-things:
     runs-on: ubuntu-latest
     steps:
@@ -27,4 +34,8 @@ jobs:
           --header "Accept: application/vnd.github.v3+json" \
           --header "Content-type: text/plain" \
           "$UPLOAD_URL?name=MyFile.txt&label=Fancy%20File" | jq .url)
-          echo Uploaded file to $DOWNLOAD_URL 
+          if [[ 0 -eq $? ]]; then
+            echo Uploaded file to $DOWNLOAD_URL 
+          else
+            exit 1
+          fi
