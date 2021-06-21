@@ -16,6 +16,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Say hello
         run: echo ${GITHUB_REF} is not yet released
+      - name: Query event
+        if: ${{  contains(github.event.release.assets.*.name, 'MyFile2.txt') }}
+        run: echo EXISTING_FILE=$(echo '${{toJSON(github.event.release.assets)}}'| jq -r '.[] | select(.name=="MyFile2.txt") | .url') >> $GITHUB_ENV
       - name: Make a file
         run: echo $(date) is when this was created for ${GITHUB_REF} > release-file.txt
       - name: Add upload URL to environment
