@@ -23,5 +23,5 @@ jobs:
         run: echo "Attempting to retrieve releases from '$RELEASE_URL'"; curl -s $RELEASE_URL | jq
       - name: Play with expressions
         run: |
-          echo ${{ contains(github.event.release.assets.*.name, 'MyFile2.txt') && github.event.release.assets[0].url || "NOPE" }}
+          echo ${{ contains(github.event.release.assets.*.name, 'MyFile2.txt') && github.event.release.assets[0].url}}
       
