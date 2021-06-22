@@ -11,7 +11,7 @@ jobs:
   do-staging-things:
     runs-on: ubuntu-latest
     outputs:
-      download-url: ${{steps.upload.outputs.url}}
+      download-url: ${{steps.set-output.outputs.url}}
     steps:
       - uses: actions/checkout@v2
       - name: Say hello
@@ -20,6 +20,7 @@ jobs:
         if: ${{  contains(github.event.release.assets.*.name, 'MyFile2.txt') }}
         run: echo EXISTING_FILE=$(echo '${{toJSON(github.event.release.assets)}}'| jq -r '.[] | select(.name=="MyFile2.txt") | .url') >> $GITHUB_ENV
       - name: Make a file
+        if: ${{ ! env.EXISTING_FILE }}
         run: echo $(date) is when this was created for ${GITHUB_REF} > release-file.txt
       - name: Add upload URL to environment
         run: echo UPLOAD_URL=$(echo '${{github.event.release.upload_url}}' | sed -e 's/{?name,label}//') >> $GITHUB_ENV
@@ -27,8 +28,9 @@ jobs:
         run: echo $UPLOAD_URL
       - name: Attempt an upload
         id: upload
+        if: ${{ ! env.EXISTING_FILE }}
         run: |
-          UPLOAD_JSON=$(curl -f -s -X POST --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          UPLOAD_JSON=$(curl -s -X POST --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
             --data-binary @release-file.txt \
             --header "Accept: application/vnd.github.v3+json" \
             --header "Content-type: text/plain" \
@@ -37,10 +39,19 @@ jobs:
           DOWNLOAD_URL=$(echo "$UPLOAD_JSON" | jq .url)
           if [[ -n "$DOWNLOAD_URL" ]]; then
             echo Uploaded file to $DOWNLOAD_URL
-            echo "::set-output name=url::$DOWNLOAD_URL"
+            # echo "::set-output name=url::$DOWNLOAD_URL"
+            echo "DOWNLOAD_URL=$DOWNLOAD_URL" >> $GITHUB_ENV
           else
             echo "Upload unsuccessful (probably you already uploaded it?)"
             exit 1
+          fi
+      - name: Set download URL output
+        id: set-output
+        run: |
+          if [[ -n "$EXISTING_FILE" ]]; then
+            echo "::set-output name=url::$EXISTING_FILE"
+          else
+            echo "::set-output name=url::$DOWNLOAD_URL"
           fi
 
   do-release-things:
